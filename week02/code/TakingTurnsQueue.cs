@@ -51,7 +51,7 @@ public class TakingTurnsQueue
 
             if (person.Turns > 0)
             {
-                _people.Enqueue(person); // ✅ Re-enqueue if they still have turns left
+                _people.Enqueue(person); //  Re-enqueue if they still have turns left
             }
             //  Do not re-enqueue if turns == 0
         }

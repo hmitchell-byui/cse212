@@ -8,7 +8,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Basic priority queue operations
     // Expected Result:  Items are dequeued in order of priority
-    // Defect(s) Found: 
+    // Defect(s) Found: None
     public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
@@ -22,9 +22,9 @@ public class PriorityQueueTests
     }
 
     [TestMethod]
-    // Scenario:  Multiple items with same priority
+    // Scenario: Multiple items with same priority
     // Expected Result: Items with same priority are dequeued in FIFO order
-    // Defect(s) Found: 
+    // Defect(s) Found: Code does not maintain FIFO order for same priority items
     public void TestPriorityQueue_2()
     {
         var priorityQueue = new PriorityQueue();
@@ -39,7 +39,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario:  Dequeue from empty queue
     // Expected Result: Exception is thrown
-    // Defect(s) Found:
+    // Defect(s) Found: Code does not throw exception when dequeuing from empty queue
     public void TestPriorityQueue_3()
     {
         var priorityQueue = new PriorityQueue();
@@ -48,7 +48,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario:  Enqueue and Dequeue interleaved  
     // Expected Result: Items are dequeued in correct priority order
-    // Defect(s) Found:
+    // Defect(s) Found: None
     public void TestPriorityQueue_4()
     {
         var priorityQueue = new PriorityQueue();
@@ -63,7 +63,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue one item and dequeue it
     // Expected Result: That item is returned
-    // Defect(s) Found: 
+    // Defect(s) Found: None
     public void TestPriorityQueue_SingleItem()
     {
         var priorityQueue = new PriorityQueue();
@@ -74,7 +74,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue items with negative priority values
     // Expected Result: Highest (least negative) priority item is dequeued first
-    // Defect(s) Found: 
+    // Defect(s) Found: Negative priorities are not handled correctly
     public void TestPriorityQueue_NegativePriorities()
     {
         var priorityQueue = new PriorityQueue();
