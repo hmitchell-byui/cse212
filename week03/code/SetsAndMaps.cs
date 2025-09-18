@@ -19,11 +19,38 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
-    public static string[] FindPairs(string[] words)
+    public static string[] FindPairs(string[] pairs)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // Use a HashSet for O(1) lookups of each pair
+        var pairSet = new HashSet<string>(pairs);
+
+        // Store the final result strings
+        var result = new List<string>();
+
+        // Iterate through each pair in the input
+        foreach (var pair in pairs)
+        {
+            // Reverse the characters in the current pair
+            var reversed = new string(new[] { pair[1], pair[0] });
+
+            // Check if the reversed pair exists and it's not a palindrome (e.g., "aa")
+            if (pairSet.Contains(reversed) && pair[0] != pair[1])
+            {
+                // Format the pair consistently to avoid duplicates like "ab & ba" and "ba & ab"
+                var formatted = pair.CompareTo(reversed) < 0 ? $"{pair} & {reversed}" : $"{reversed} & {pair}";
+
+                // Add to result only if not already present
+                if (!result.Contains(formatted))
+                {
+                    result.Add(formatted);
+                }
+            }
+        }
+
+        // Return the result as an array
+        return result.ToArray();
     }
+
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -36,17 +63,31 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
-    public static Dictionary<string, int> SummarizeDegrees(string filename)
+    public static Dictionary<string, int> SummarizeDegrees(string path)
     {
-        var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename))
+        // Dictionary to store counts of each education level
+        var eduCounts = new Dictionary<string, int>();
+
+        // Read each line from the census file
+        foreach (var line in File.ReadLines(path))
         {
-            var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            // Extract the education level from the 4th column (index 3)
+            var edLevel = line.Split(',')[3].Trim();
+
+            // Increment count for this education level
+            if (eduCounts.ContainsKey(edLevel))
+            {
+                eduCounts[edLevel]++;
+            }
+            else
+            {
+                eduCounts[edLevel] = 1;
+            }
         }
 
-        return degrees;
+        return eduCounts;
     }
+
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
@@ -66,8 +107,54 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Normalize both words: remove spaces and convert to lowercase
+        var normalizedWord1 = word1.Replace(" ", "").ToLower();
+        var normalizedWord2 = word2.Replace(" ", "").ToLower();
+        // If lengths differ, they cannot be anagrams
+        if (normalizedWord1.Length != normalizedWord2.Length)
+        {
+            return false;
+        }
+        // Dictionary to count occurrences of each letter in word1
+        var letterCounts = new Dictionary<char, int>();
+        foreach (var letter in normalizedWord1)
+        {
+            if (letterCounts.ContainsKey(letter))
+            {
+                letterCounts[letter]++;
+            }
+            else
+            {
+                letterCounts[letter] = 1;
+            }
+        }
+        // Decrease counts based on letters in word2
+        foreach (var letter in normalizedWord2)
+        {
+            if (letterCounts.ContainsKey(letter))
+            {
+                letterCounts[letter]--;
+                // If count goes negative, word2 has extra letters not in word1
+                if (letterCounts[letter] < 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Letter in word2 not found in word1
+                return false;
+            }
+        }
+        // If all counts are zero, they are anagrams
+        foreach (var count in letterCounts.Values)
+        {
+            if (count != 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
