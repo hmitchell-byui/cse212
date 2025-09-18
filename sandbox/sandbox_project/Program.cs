@@ -10,4 +10,10 @@ public class Program
 
         Console.WriteLine("Hello Sandbox World!");
     }
+    static string Anagram(string s)
+    {
+        char[] arr = s.ToCharArray();
+        Array.Sort(arr);
+        return new string(arr);
+    }
 }
