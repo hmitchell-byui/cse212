@@ -95,31 +95,31 @@ public static class Recursion
     /// 'remember' has already been added as an input parameter to 
     /// the function for you to complete this task.
     /// </summary>
-public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
-{
-    // Base Cases
-    if (s == 0)
-        return 0;
-    if (s == 1)
-        return 1;
-    if (s == 2)
-        return 2;
-    if (s == 3)
-        return 4;
+    public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
+    {
+        // Base Cases
+        if (s == 0)
+            return 0;
+        if (s == 1)
+            return 1;
+        if (s == 2)
+            return 2;
+        if (s == 3)
+            return 4;
 
-    // Initialize the remember dictionary the first time the function is called
-    if (remember == null)
-        remember = new Dictionary<int, decimal>();
+        // Initialize the remember dictionary the first time the function is called
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
 
-    // Check if we have already solved this problem
-    if (remember.ContainsKey(s))
-        return remember[s];
+        // Check if we have already solved this problem
+        if (remember.ContainsKey(s))
+            return remember[s];
 
-    // Solve using recursion with memoization
-    decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
-    remember[s] = ways;
-    return ways;
-}
+        // Solve using recursion with memoization
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember[s] = ways;
+        return ways;
+    }
 
 
     /// <summary>
@@ -155,19 +155,39 @@ public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember
     /// Use recursion to insert all paths that start at (0,0) and end at the
     /// 'end' square into the results list.
     /// </summary>
-    public static void SolveMaze(List<string> results, Maze maze, int x = 0, int y = 0, List<ValueTuple<int, int>>? currPath = null)
+    public static void SolveMaze(List<string> results, Maze maze, int x = 0, int y = 0, List<(int, int)>? currPath = null)
     {
-        // If this is the first time running the function, then we need
-        // to initialize the currPath list.
-        if (currPath == null) {
-            currPath = new List<ValueTuple<int, int>>();
+        if (currPath == null)
+            currPath = new List<(int, int)>();
+
+        // Add current position
+        currPath.Add((x, y));
+
+        // Base case: reached the end
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(currPath.AsString());
         }
-        
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
+        else
+        {
+            // Explore all 4 directions: Right, Down, Left, Up
+            int[] dx = { 1, 0, -1, 0 };
+            int[] dy = { 0, 1, 0, -1 };
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
+            for (int i = 0; i < 4; i++)
+            {
+                int newX = x + dx[i];
+                int newY = y + dy[i];
 
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+                // Correct order for IsValidMove
+                if (maze.IsValidMove(currPath, newX, newY))
+                {
+                    SolveMaze(results, maze, newX, newY, currPath);
+                }
+            }
+        }
+
+        // Backtrack — remove the current position
+        currPath.RemoveAt(currPath.Count - 1);
     }
 }
